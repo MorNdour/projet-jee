@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+   <title>Title</title>
+</h:head>
+<style type="text/css">
+   .cheap {
+      background-color: #54a90a !important;
+      background-image: none !important;
+      color: #ffffff !important;
+   }
+</style>
+
+<h:body>
+   <ui:include  src="navbar.xhtml"></ui:include>
+<!--   <b:container fluid="true">-->
+<!--   <b:row>-->
+<!--      <b:column medium-screen="4">-->
+<!--         <ui:include src="leftBarMenu.xhtml"></ui:include>-->
+<!--      </b:column>-->
+<!--      <b:column medium-screen="8">-->
+<!--         <ui:include  src="base.xhtml"></ui:include>-->
+<!--      </b:column>-->
+<!--   </b:row>-->
+<!--   </b:container>-->
+<!--   <p:panelGrid>-->
+<!--      <p:row>-->
+<!--         <p:column>-->
+<!--            <ui:include src="leftBarMenu.xhtml"></ui:include>-->
+<!--         </p:column>-->
+<!--         <p:column style="width: 100%;">-->
+<!--            <div >Liste des produit</div>-->
+<!--            <div>-->
+<!--               <h:form>-->
+<!--                  <p:toolbar>-->
+<!--                     <p:toolbarGroup align="right">-->
+<!--                        <p:commandButton type="button" value="New" icon="pi pi-file" styleClass="mr-5" />-->
+<!--                        <p:commandButton type="button" value="Ajouter" icon="pi pi-folder-open" styleClass="ui-button-success" />-->
+<!--                     </p:toolbarGroup>-->
+
+<!--                  </p:toolbar>-->
+<!--               </h:form>-->
+<!--            </div>-->
+<!--            <div class="card">-->
+<!--               <p:dataTable var="produit" value="#{produitList.produits}" selectionMode="single"-->
+<!--                            selection="#{produitList.selectedProduit}" rowKey="#{produit.id}"-->
+<!--                            rowStyleClass="#{produit.prix_depart > 1000 ? 'cheap' : null}">-->
+
+<!--                  <p:column headerText="Reference">-->
+<!--                     <h:outputText value="#{produit.id}" />-->
+<!--                  </p:column>-->
+
+<!--                  <p:column headerText="Name">-->
+<!--                     <h:outputText value="#{produit.nom}" />-->
+<!--                  </p:column>-->
+<!--                  <p:column headerText="Prix">-->
+<!--                     <h:outputText value="#{produit.prix_depart}" />-->
+<!--                  </p:column>-->
+
+<!--                  <p:column headerText="Category">-->
+<!--                     <h:outputText value="#{produit.category.nom}" />-->
+<!--                  </p:column>-->
+
+<!--                  <p:column headerText="Marque">-->
+<!--                     <h:outputText value="#{produit.marque.nom}" />-->
+<!--                  </p:column>-->
+<!--               </p:dataTable>-->
+<!--            </div>-->
+<!--         </p:column>-->
+<!--      </p:row>-->
+<!--   </p:panelGrid>-->
+
+</h:body>
+</html>

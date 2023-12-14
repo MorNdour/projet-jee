@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>base</title>
+</h:head>
+
+<h:body>
+    <div class="card crud-demo">
+        <h:form id="form">
+            <p:growl id="messages" showDetail="true" />
+
+            <p:toolbar>
+                <p:toolbarGroup align="right">
+                    <p:commandButton value="Ajouter" icon="pi pi-plus" actionListener="#{produitList.newProduct}"
+                                     update=":dialogs:manage-product-content" oncomplete="PF('manageProductDialog').show()"
+                                     styleClass="ui-button-success" style="margin-right: .5rem">
+                        <p:resetInput target=":dialogs:manage-product-content" />
+                    </p:commandButton>
+                    <p:commandButton id="delete-products-button" value="#{produitList.deleteButtonMessage}"
+                                     icon="pi pi-trash" actionListener="#{produitList.deleteProduct}"
+                                     styleClass="ui-button-danger" disabled="#{!produitList.hasSelectedProducts()}" update="@this">
+                        <p:confirm header="Confirmation" message="Delete the selected products?"
+                                   icon="pi pi-exclamation-triangle" />
+                    </p:commandButton>
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:dataTable widgetVar="dt-Products" var="product" value="#{produitList.produits}"
+                         reflow="true" styleClass="products-table" selection="#{produitList.selectedProducts}"
+                         rowKey="#{product.id}" paginator="true" rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                <f:facet name="header">
+                    <div class="products-table-header" style="justify-content: space-between;display: flex">
+                        <span style="font-weight: bold">PRODUCTS</span>
+                        <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                        <p:inputText id="globalFilter" onkeyup="PF('dtProducts').filter()" placeholder="Search" />
+                    </span>
+                    </div>
+                </f:facet>
+
+                <p:ajax event="rowSelect" update=":form:delete-products-button" />
+                <p:ajax event="rowUnselect" update=":form:delete-products-button" />
+                <p:ajax event="rowSelectCheckbox" update=":form:delete-products-button" />
+                <p:ajax event="rowUnselectCheckbox" update=":form:delete-products-button" />
+                <p:ajax event="toggleSelect" update=":form:delete-products-button" />
+
+                <p:column selectionMode="multiple" exportable="false"></p:column>
+
+                <p:column headerText="Nom" sortBy="#{product.nom}">
+                    <h:outputText value="#{product.nom}" />
+                </p:column>
+                <p:column headerText="Marque" sortBy="#{product.marque.nom}">
+                    <h:outputText value="#{product.marque.nom}" />
+                </p:column>
+                <p:column headerText="Prix" sortBy="#{product.prix_depart}">
+                    <h:outputText value="#{product.prix_depart}" style="font-weight: 700">
+                        <f:convertNumber currencySymbol="$" type="currency" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Category" sortBy="#{product.category.nom}" >
+                    <h:outputText value="#{product.category.nom}" />
+                </p:column>
+                <p:column headerText="Annee Model" sortBy="#{product.annee_model}">
+                    <h:outputText value="#{product.annee_model}" />
+                </p:column>
+                <p:column exportable="false">
+                    <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-product-content"
+                                     oncomplete="PF('manageProductDialog').show()"
+                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                        <f:setPropertyActionListener value="#{product}" target="#{produitList.selectedProduit}" />
+                        <p:resetInput target=":dialogs:manage-product-content" />
+                    </p:commandButton>
+                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+                                     process="@this"
+                                     oncomplete="PF('deleteProductDialog').show()">
+                        <f:setPropertyActionListener value="#{product}" target="#{produitList.selectedProduit}" />
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+
+        <h:form id="dialogs">
+            <p:dialog header="Product Details" showEffect="fade" modal="true" widgetVar="manageProductDialog"
+                      responsive="true">
+                <p:outputPanel id="manage-product-content" class="ui-fluid">
+                    <p:outputPanel >
+                        <div class="field">
+                            <p:outputLabel for="name">Nom</p:outputLabel>
+                            <p:inputText id="name" value="#{produitList.selectedProduit.nom}" required="true" />
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="marque">Marque</p:outputLabel>
+                            <p:inputText id="marque" value="#{produitList.selectedProduit.marque.nom}" />
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="prix">Prix</p:outputLabel>
+                            <p:inputText id="prix" value="#{produitList.selectedProduit.prix_depart}" />
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="category">Category</p:outputLabel>
+                            <p:inputText id="category" value="#{produitList.selectedProduit.category.nom}" />
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="annee">Annee</p:outputLabel>
+                            <p:inputText id="annee" value="#{produitList.selectedProduit.annee_model}" />
+                        </div>
+<!--                        <div class="field">-->
+<!--                            <p:outputLabel for="category">Category</p:outputLabel>-->
+<!--                            <p:selectOneRadio id="category" value="#{crudView.selectedProduct.category}"-->
+<!--                                              layout="responsive" columns="2">-->
+<!--                                <f:selectItem itemLabel="Accessories" itemValue="Accessories" />-->
+<!--                                <f:selectItem itemLabel="Clothing" itemValue="Clothing" />-->
+<!--                                <f:selectItem itemLabel="Electronics" itemValue="Electronics" />-->
+<!--                                <f:selectItem itemLabel="Fitness" itemValue="Fitness" />-->
+<!--                            </p:selectOneRadio>-->
+<!--                        </div>-->
+<!--                        <div class="formgrid grid">-->
+<!--                            <div class="field col">-->
+<!--                                <p:outputLabel for="price">Price</p:outputLabel>-->
+<!--                                <p:inputNumber id="price" value="#{crudView.selectedProduct.price}" symbol=" USD"-->
+<!--                                               symbolPosition="s" decimalSeparator="." thousandSeparator="," />-->
+<!--                            </div>-->
+<!--                            <div class="field col">-->
+<!--                                <p:outputLabel for="quantity">Quantity</p:outputLabel>-->
+<!--                                <p:spinner id="quantity" min="0" value="#{crudView.selectedProduct.quantity}" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+                    </p:outputPanel>
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Save" icon="pi pi-check" actionListener="#{produitList.saveProduct}"
+                                     update="manage-product-content" process="manage-product-content @this" />
+                    <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                                     class="ui-button-secondary" type="button" />
+                </f:facet>
+            </p:dialog>
+
+            <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
+                             message="Delete the product?" header="Confirm" severity="warn">
+                <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{produitList.deleteProduct}"
+                                 process="@this" update=":form:delete-products-button"
+                                 oncomplete="PF('deleteProductDialog').hide()" />
+                <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                 onclick="PF('deleteProductDialog').hide()" />
+            </p:confirmDialog>
+
+            <p:confirmDialog global="true" showEffect="fade" width="300">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                 icon="pi pi-times" />
+            </p:confirmDialog>
+        </h:form>
+    </div>
+</h:body>
+</html>
